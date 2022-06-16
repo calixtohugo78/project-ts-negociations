@@ -1,3 +1,4 @@
+import { DayOfWeek } from "../enums/day-of-week.js";
 import { Negociation } from "../models/negociation.js";
 import { Negotiations } from "../models/negotiations.js";
 import { MensageView } from "../views/mensage-view.js";
@@ -14,10 +15,15 @@ export class NegociationController {
     }
     add() {
         const negociation = this.createNegociation();
+        const dayWeek = negociation.date.getDay();
+        if (!this.isBusinessDay(dayWeek)) {
+            this.mensageView
+                .update("Somente negociações em dias úteis são permitidas!");
+            return;
+        }
         this.negociations.add(negociation);
-        this.mensageView.update('Negociação adicionada com sucesso!');
-        this.negociationsView.update(this.negociations);
         this.clearForm();
+        this.attView();
     }
     createNegociation() {
         const expReg = /-/g;
@@ -26,10 +32,18 @@ export class NegociationController {
         const formatValue = parseFloat(this._inputValue.value);
         return new Negociation(formatDate, formatQtd, formatValue);
     }
+    isBusinessDay(date) {
+        return date > DayOfWeek.SUNDAY
+            && date < DayOfWeek.SATURDAY;
+    }
     clearForm() {
         this._inputDate.value = "";
         this._inputQtd.value = "1";
         this._inputValue.value = "0.0";
         this._inputDate.focus();
+    }
+    attView() {
+        this.mensageView.update('Negociação adicionada com sucesso!');
+        this.negociationsView.update(this.negociations);
     }
 }
