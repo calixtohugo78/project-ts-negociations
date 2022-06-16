@@ -15,4 +15,20 @@ export class Negociation {
         return this.quantity * this.value
     }
 
+    public static createFrom(dateStr: string, quantityStr: string, valueStr: string): Negociation {
+
+        const expReg = /-/g;
+
+        const formatDate = new Date(dateStr.replace(expReg, ','));
+        const formatQtd = parseInt(quantityStr);
+        const formatValue = parseFloat(valueStr)
+
+        return new Negociation(
+            formatDate,
+            formatQtd,
+            formatValue
+        );
+
+    }
+
 }

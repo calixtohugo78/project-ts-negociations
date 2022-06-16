@@ -11,4 +11,11 @@ export class Negociation {
     get volume() {
         return this.quantity * this.value;
     }
+    static createFrom(dateStr, quantityStr, valueStr) {
+        const expReg = /-/g;
+        const formatDate = new Date(dateStr.replace(expReg, ','));
+        const formatQtd = parseInt(quantityStr);
+        const formatValue = parseFloat(valueStr);
+        return new Negociation(formatDate, formatQtd, formatValue);
+    }
 }

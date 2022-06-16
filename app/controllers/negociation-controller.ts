@@ -10,7 +10,7 @@ export class NegociationController {
     private _inputQtd: HTMLInputElement;
     private _inputValue: HTMLInputElement;
     private negociations: Negotiations = new Negotiations();
-    private negociationsView = new NegotiationsView('#negociationsView');
+    private negociationsView = new NegotiationsView('#negociationsView', true);
     private mensageView = new MensageView('#mensagemView');
 
     constructor() {
@@ -23,7 +23,12 @@ export class NegociationController {
 
     public add(): void {
 
-        const negociation = this.createNegociation();
+        const negociation = Negociation.createFrom(
+            this._inputDate.value,
+            this._inputQtd.value,
+            this._inputValue.value
+        );
+
         const dayWeek = negociation.date.getDay();
 
         if (!this.isBusinessDay(dayWeek)) {
@@ -37,22 +42,6 @@ export class NegociationController {
         this.negociations.add(negociation);
         this.clearForm();
         this.attView();
-
-    }
-
-    private createNegociation(): Negociation {
-
-        const expReg = /-/g;
-
-        const formatDate = new Date(this._inputDate.value.replace(expReg, ','));
-        const formatQtd = parseInt(this._inputQtd.value);
-        const formatValue = parseFloat(this._inputValue.value)
-
-        return new Negociation(
-            formatDate,
-            formatQtd,
-            formatValue
-        );
 
     }
 

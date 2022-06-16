@@ -1,16 +1,24 @@
 export abstract class View<T> {
 
     protected element: HTMLElement;
+    private scape: boolean = false;
 
-    constructor(selector: string) {
-        this.element = document.querySelector(selector)
+    constructor(selector: string, scape?: boolean) {
+        this.element = document.querySelector(selector);
+        if(scape) this.scape = scape;
     }
-
-    protected abstract template(model: T):string
 
     public update(model: T): void {
-        const template = this.template(model);
+        let template = this.template(model);
+
+        if (this.scape) {
+            template = template
+                .replace(/<script>[\s\S]*?<\/script>/, '')
+        }
+
         this.element.innerHTML = template;
     }
+
+    protected abstract template(model: T): string
 
 }

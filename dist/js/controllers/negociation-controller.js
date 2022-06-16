@@ -6,7 +6,7 @@ import { NegotiationsView } from "../views/negociations-view.js";
 export class NegociationController {
     constructor() {
         this.negociations = new Negotiations();
-        this.negociationsView = new NegotiationsView('#negociationsView');
+        this.negociationsView = new NegotiationsView('#negociationsView', true);
         this.mensageView = new MensageView('#mensagemView');
         this._inputDate = document.querySelector('#data');
         this._inputQtd = document.querySelector('#quantidade');
@@ -14,7 +14,7 @@ export class NegociationController {
         this.negociationsView.update(this.negociations);
     }
     add() {
-        const negociation = this.createNegociation();
+        const negociation = Negociation.createFrom(this._inputDate.value, this._inputQtd.value, this._inputValue.value);
         const dayWeek = negociation.date.getDay();
         if (!this.isBusinessDay(dayWeek)) {
             this.mensageView
@@ -24,13 +24,6 @@ export class NegociationController {
         this.negociations.add(negociation);
         this.clearForm();
         this.attView();
-    }
-    createNegociation() {
-        const expReg = /-/g;
-        const formatDate = new Date(this._inputDate.value.replace(expReg, ','));
-        const formatQtd = parseInt(this._inputQtd.value);
-        const formatValue = parseFloat(this._inputValue.value);
-        return new Negociation(formatDate, formatQtd, formatValue);
     }
     isBusinessDay(date) {
         return date > DayOfWeek.SUNDAY
