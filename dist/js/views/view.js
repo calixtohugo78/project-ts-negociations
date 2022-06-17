@@ -1,7 +1,13 @@
 export class View {
     constructor(selector, scape) {
         this.scape = false;
-        this.element = document.querySelector(selector);
+        const elementTemp = document.querySelector(selector);
+        if (elementTemp) {
+            this.element = elementTemp;
+        }
+        else {
+            throw Error("Element does not exists in DOM");
+        }
         if (scape)
             this.scape = scape;
     }

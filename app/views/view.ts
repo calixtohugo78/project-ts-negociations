@@ -4,7 +4,14 @@ export abstract class View<T> {
     private scape: boolean = false;
 
     constructor(selector: string, scape?: boolean) {
-        this.element = document.querySelector(selector);
+        const elementTemp = document.querySelector(selector);
+
+        if(elementTemp) {
+            this.element = elementTemp as HTMLElement;
+        } else {
+            throw Error("Element does not exists in DOM")
+        }
+
         if(scape) this.scape = scape;
     }
 

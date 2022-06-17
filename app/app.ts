@@ -4,10 +4,16 @@ const controller = new NegociationController;
 
 const form = document.querySelector('.form');
 
-form.addEventListener('submit', (event: Event) => {
+if(form){
 
-    event.preventDefault();
+    form.addEventListener('submit', (event: Event) => {
+    
+        event.preventDefault();
+    
+        controller.add();
+    
+    })
 
-    controller.add();
-
-})
+} else {
+    throw Error("Not possible to execute the code, please check if form selector exists!")
+}
