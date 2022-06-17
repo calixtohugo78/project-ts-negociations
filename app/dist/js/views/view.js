@@ -1,13 +1,5 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-import { logExecuteTime } from "../decorators/log-execute-time.js";
 export class View {
-    constructor(selector, scape) {
-        this.scape = false;
+    constructor(selector) {
         const elementTemp = document.querySelector(selector);
         if (elementTemp) {
             this.element = elementTemp;
@@ -15,18 +7,9 @@ export class View {
         else {
             throw Error("Element does not exists in DOM");
         }
-        if (scape)
-            this.scape = scape;
     }
     update(model) {
         let template = this.template(model);
-        if (this.scape) {
-            template = template
-                .replace(/<script>[\s\S]*?<\/script>/, '');
-        }
         this.element.innerHTML = template;
     }
 }
-__decorate([
-    logExecuteTime()
-], View.prototype, "update", null);

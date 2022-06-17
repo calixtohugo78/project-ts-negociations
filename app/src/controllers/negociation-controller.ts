@@ -1,4 +1,6 @@
+import { domInjector } from "../decorators/dom-injector.js";
 import { logExecuteTime } from "../decorators/log-execute-time.js";
+import { logInspect } from "../decorators/log-inspect.js";
 import { DayOfWeek } from "../enums/day-of-week.js";
 import { Negociation } from "../models/negociation.js";
 import { Negotiations } from "../models/negotiations.js";
@@ -7,22 +9,23 @@ import { NegotiationsView } from "../views/negociations-view.js";
 
 export class NegociationController {
 
+    @domInjector("#data")
     private _inputDate: HTMLInputElement;
+    @domInjector("#quantidade")
     private _inputQtd: HTMLInputElement;
+    @domInjector("#valor")
     private _inputValue: HTMLInputElement;
+
     private negociations: Negotiations = new Negotiations();
-    private negociationsView = new NegotiationsView('#negociationsView', true);
+    private negociationsView = new NegotiationsView('#negociationsView');
     private mensageView = new MensageView('#mensagemView');
 
     constructor() {
-        this._inputDate = document.querySelector('#data') as HTMLInputElement;
-        this._inputQtd = document.querySelector('#quantidade') as HTMLInputElement;
-        this._inputValue = document.querySelector('#valor') as HTMLInputElement;
-
         this.negociationsView.update(this.negociations);
     }
 
     @logExecuteTime()
+    @logInspect()
     public add(): void {
 
         const negociation = Negociation.createFrom(

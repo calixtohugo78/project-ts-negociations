@@ -1,11 +1,9 @@
-import { logExecuteTime } from "../decorators/log-execute-time.js";
 
 export abstract class View<T> {
 
     protected element: HTMLElement;
-    private scape: boolean = false;
 
-    constructor(selector: string, scape?: boolean) {
+    constructor(selector: string) {
         const elementTemp = document.querySelector(selector);
 
         if(elementTemp) {
@@ -13,19 +11,11 @@ export abstract class View<T> {
         } else {
             throw Error("Element does not exists in DOM")
         }
-
-        if(scape) this.scape = scape;
     }
 
-    @logExecuteTime()
     public update(model: T): void {
 
         let template = this.template(model);
-
-        if (this.scape) {
-            template = template
-                .replace(/<script>[\s\S]*?<\/script>/, '')
-        }
 
         this.element.innerHTML = template;
 
