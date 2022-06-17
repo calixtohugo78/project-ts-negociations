@@ -1,3 +1,4 @@
+import { logExecuteTime } from "../decorators/log-execute-time.js";
 import { DayOfWeek } from "../enums/day-of-week.js";
 import { Negociation } from "../models/negociation.js";
 import { Negotiations } from "../models/negotiations.js";
@@ -21,6 +22,7 @@ export class NegociationController {
         this.negociationsView.update(this.negociations);
     }
 
+    @logExecuteTime()
     public add(): void {
 
         const negociation = Negociation.createFrom(
