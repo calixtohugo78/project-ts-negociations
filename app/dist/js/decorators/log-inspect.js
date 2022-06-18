@@ -11,3 +11,4 @@ export function logInspect() {
         return descriptor;
     };
 }
+//# sourceMappingURL=log-inspect.js.map

@@ -12,3 +12,4 @@ export function scape() {
         return descriptor;
     };
 }
+//# sourceMappingURL=scape.js.map

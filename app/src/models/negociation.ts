@@ -1,4 +1,6 @@
-export class Negociation {
+import { ModelInterface } from "../interfaces/model-interface.js";
+
+export class Negociation implements ModelInterface<Negociation>{
 
     constructor(
         private _date: Date,
@@ -28,6 +30,24 @@ export class Negociation {
             formatQtd,
             formatValue
         );
+
+    }
+
+    public forText(): string {
+        return `
+            Negociation Info:
+
+            - Date: ${this._date}
+            - Quantity: ${this.quantity}
+            - Value: ${this.value}
+        `
+    }
+
+    public isEqual(negociation: Negociation): boolean {
+
+        return this._date.getDate() === negociation._date.getDate()
+            && this._date.getMonth() === negociation._date.getMonth()
+            && this._date.getFullYear() === negociation._date.getFullYear();
 
     }
 

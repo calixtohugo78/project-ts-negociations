@@ -4,6 +4,8 @@ import { logInspect } from "../decorators/log-inspect.js";
 import { DayOfWeek } from "../enums/day-of-week.js";
 import { Negociation } from "../models/negociation.js";
 import { Negotiations } from "../models/negotiations.js";
+import { NegociationsService } from "../services/negociations-service.js";
+import { print } from "../utils/print.js";
 import { MensageView } from "../views/mensage-view.js";
 import { NegotiationsView } from "../views/negociations-view.js";
 
@@ -11,14 +13,17 @@ export class NegociationController {
 
     @domInjector("#data")
     private _inputDate: HTMLInputElement;
+
     @domInjector("#quantidade")
     private _inputQtd: HTMLInputElement;
+
     @domInjector("#valor")
     private _inputValue: HTMLInputElement;
 
     private negociations: Negotiations = new Negotiations();
     private negociationsView = new NegotiationsView('#negociationsView');
     private mensageView = new MensageView('#mensagemView');
+    private negociationService = new NegociationsService();
 
     constructor() {
         this.negociationsView.update(this.negociations);
@@ -45,8 +50,34 @@ export class NegociationController {
         }
 
         this.negociations.add(negociation);
+        print(negociation, this.negociations);
         this.clearForm();
         this.attView();
+
+    }
+
+    public importData(): void {
+
+        this.negociationService
+            .getNegociationsOfDay()
+            .then(negociationOfToday => {
+
+                return negociationOfToday.filter(item => {
+                    return !this.negociations
+                        .list()
+                        .some(negociation => negociation.isEqual(item))
+                })
+
+            })
+            .then(negociationToday => {
+
+                for (let item of negociationToday) {
+                    this.negociations.add(item);
+                }
+
+                this.negociationsView.update(this.negociations);
+
+            })
 
     }
 

@@ -18,4 +18,19 @@ export class Negociation {
         const formatValue = parseFloat(valueStr);
         return new Negociation(formatDate, formatQtd, formatValue);
     }
+    forText() {
+        return `
+            Negociation Info:
+
+            - Date: ${this._date}
+            - Quantity: ${this.quantity}
+            - Value: ${this.value}
+        `;
+    }
+    isEqual(negociation) {
+        return this._date.getDate() === negociation._date.getDate()
+            && this._date.getMonth() === negociation._date.getMonth()
+            && this._date.getFullYear() === negociation._date.getFullYear();
+    }
 }
+//# sourceMappingURL=negociation.js.map

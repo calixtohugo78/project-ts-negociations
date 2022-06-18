@@ -10,6 +10,8 @@ import { logInspect } from "../decorators/log-inspect.js";
 import { DayOfWeek } from "../enums/day-of-week.js";
 import { Negociation } from "../models/negociation.js";
 import { Negotiations } from "../models/negotiations.js";
+import { NegociationsService } from "../services/negociations-service.js";
+import { print } from "../utils/print.js";
 import { MensageView } from "../views/mensage-view.js";
 import { NegotiationsView } from "../views/negociations-view.js";
 export class NegociationController {
@@ -17,6 +19,7 @@ export class NegociationController {
         this.negociations = new Negotiations();
         this.negociationsView = new NegotiationsView('#negociationsView');
         this.mensageView = new MensageView('#mensagemView');
+        this.negociationService = new NegociationsService();
         this.negociationsView.update(this.negociations);
     }
     add() {
@@ -28,8 +31,26 @@ export class NegociationController {
             return;
         }
         this.negociations.add(negociation);
+        print(negociation, this.negociations);
         this.clearForm();
         this.attView();
+    }
+    importData() {
+        this.negociationService
+            .getNegociationsOfDay()
+            .then(negociationOfToday => {
+            return negociationOfToday.filter(item => {
+                return !this.negociations
+                    .list()
+                    .some(negociation => negociation.isEqual(item));
+            });
+        })
+            .then(negociationToday => {
+            for (let item of negociationToday) {
+                this.negociations.add(item);
+            }
+            this.negociationsView.update(this.negociations);
+        });
     }
     isBusinessDay(date) {
         return date > DayOfWeek.SUNDAY
@@ -59,3 +80,4 @@ __decorate([
     logExecuteTime(),
     logInspect()
 ], NegociationController.prototype, "add", null);
+//# sourceMappingURL=negociation-controller.js.map
